@@ -1,0 +1,27 @@
+---
+
+
+
+- name: Cluster node basic setup
+  hosts: testhost
+  remote_user: root
+  tasks:
+  - name: install cluster packages
+    yum:
+      name: "{{ packages }}"
+    vars:
+      packages:
+      - bash-completion
+      - pcs
+      - pacemaker
+      - fence-agents-all
+  - name: enable high-availability
+    firewalld:
+      service: high-availability
+      permanent: yes
+      state: enabled
+  - name: open port for fencing
+    firewalld:  
+      port: 1229/tcp
+      permanent: yes
+      state: enabled
